@@ -74,7 +74,7 @@ class AdminController extends BaseAdminController
         $fieldName = $fieldMetadata['property'];
 
         try {
-            $value = $this->get('easy_admin.property_accessor')->getValue($item, $fieldName);
+            $value = $this->get('easyadmin.property_accessor')->getValue($item, $fieldName);
         } catch (\Exception $e) {
             return '';
         }
