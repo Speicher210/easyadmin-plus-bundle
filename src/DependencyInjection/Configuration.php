@@ -27,11 +27,6 @@ class Configuration implements ConfigurationInterface
                     ->isRequired()
                     ->cannotBeEmpty()
                 ->end()
-                ->scalarNode('advanced_search_form_class')
-                    ->isRequired()
-                    ->cannotBeEmpty()
-                    ->defaultValue('form-horizontal')
-                ->end()
             ->end();
 
         return $treeBuilder;
