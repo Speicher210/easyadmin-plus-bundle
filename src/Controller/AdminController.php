@@ -26,7 +26,7 @@ class AdminController extends BaseAdminController
      * Download the data as CSV.
      *
      * For search all pages will be send to download.
-     * For list only current view
+     * For list only current view unless filters are present in which case all pages will be send.
      *
      * @return Response
      */
@@ -34,9 +34,31 @@ class AdminController extends BaseAdminController
     {
         $paginator = $this->getPaginatorForDownload($this->getReferrerAction());
 
+        $data = $this->prepareDataToDownload($paginator->getCurrentPageResults());
+
+        return $this->renderDownloadResponse($data);
+    }
+
+    protected function downloadBatchAction(array $ids): Response
+    {
+        $resources = $this->getRepository()->findBy(
+            ['id' => $ids],
+            [$this->request->query->get('sortField') => $this->request->query->get('sortDirection')]
+        );
+
+        $data = $this->prepareDataToDownload($resources);
+
+        return $this->renderDownloadResponse($data);
+    }
+
+    /**
+     * @param array|\Traversable $resources
+     */
+    protected function prepareDataToDownload($resources): array
+    {
         $fields = $this->entity['download']['fields'] ?? $this->entity['list']['fields'];
         $data = [];
-        foreach ($paginator->getCurrentPageResults() as $item) {
+        foreach ($resources as $item) {
             $row = [];
             foreach ($fields as $field => $metadata) {
                 $label = $metadata['label'] ?? \ucfirst($metadata['property']);
@@ -46,6 +68,11 @@ class AdminController extends BaseAdminController
             $data[] = $row;
         }
 
+        return $data;
+    }
+
+    protected function renderDownloadResponse(array $data): Response
+    {
         $content = $this->get('serializer')->encode($data, CsvEncoder::FORMAT);
         $filename = \sprintf('export_%s_%s.csv', $this->entity['name'], \date('Y_m_d_H_i_s'));
 
@@ -147,14 +174,25 @@ class AdminController extends BaseAdminController
                 break;
             case 'list':
             default:
-                $paginator = $this->findAll(
-                    $this->entity['class'],
-                    $this->request->query->get('page', 1),
-                    $this->entity['list']['max_results'],
-                    $this->request->query->get('sortField'),
-                    $this->request->query->get('sortDirection'),
-                    $this->entity['list']['dql_filter']
-                );
+                if ($this->request->get('filters') !== null) {
+                    $paginator = $this->findAll(
+                        $this->entity['class'],
+                        1, // page 1
+                        \PHP_INT_MAX, // all entries
+                        $this->request->query->get('sortField'),
+                        $this->request->query->get('sortDirection'),
+                        $this->entity['list']['dql_filter']
+                    );
+                } else {
+                    $paginator = $this->findAll(
+                        $this->entity['class'],
+                        $this->request->query->get('page', 1),
+                        $this->entity['list']['max_results'],
+                        $this->request->query->get('sortField'),
+                        $this->request->query->get('sortDirection'),
+                        $this->entity['list']['dql_filter']
+                    );
+                }
         }
 
         return $paginator;
