@@ -5,14 +5,15 @@ declare(strict_types=1);
 namespace Wingu\EasyAdminPlusBundle\Controller;
 
 use Doctrine\ORM\EntityRepository;
-use EasyCorp\Bundle\EasyAdminBundle\Controller\AdminController as BaseAdminController;
+use EasyCorp\Bundle\EasyAdminBundle\Controller\EasyAdminController;
 use EasyCorp\Bundle\EasyAdminBundle\Event\EasyAdminEvents;
 use Pagerfanta\Pagerfanta;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpFoundation\ResponseHeaderBag;
 use Symfony\Component\Serializer\Encoder\CsvEncoder;
+use Symfony\Contracts\Translation\TranslatorInterface;
 
-class AdminController extends BaseAdminController
+class AdminController extends EasyAdminController
 {
     protected const FLASH_TYPE_SUCCESS = 'success';
 
@@ -62,7 +63,7 @@ class AdminController extends BaseAdminController
             $row = [];
             foreach ($fields as $field => $metadata) {
                 $label = $metadata['label'] ?? \ucfirst($metadata['property']);
-                $label = $this->get('translator')->trans($label);
+                $label = $this->has('translator') ? $this->get('translator')->trans($label) : $label;
                 $row[$label] = $this->renderEntityField($item, $metadata);
             }
             $data[] = $row;
@@ -196,5 +197,12 @@ class AdminController extends BaseAdminController
         }
 
         return $paginator;
+    }
+
+    public static function getSubscribedServices(): array
+    {
+        return \array_merge(parent::getSubscribedServices(), [
+            'translator' => '?' . TranslatorInterface::class,
+        ]);
     }
 }

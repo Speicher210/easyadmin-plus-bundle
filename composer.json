@@ -33,7 +33,8 @@
   },
   "suggest": {
     "speicher210/cloudinary-bundle": "",
-    "friendsofsymfony/user-bundle": ""
+    "friendsofsymfony/user-bundle": "",
+    "symfony/translation": ""
   },
   "autoload": {
     "psr-4": {
