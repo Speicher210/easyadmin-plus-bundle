@@ -7,10 +7,10 @@
     <services>
         <defaults autowire="true" public="false"/>
 
-        <service id="Wingu\EasyAdminPlusBundle\Search\Autocomplete" class="Wingu\EasyAdminPlusBundle\Search\Autocomplete">
-            <argument type="service" id="easyadmin.config.manager" />
-            <argument type="service" id="easyadmin.finder" />
-            <argument type="service" id="property_accessor" />
+        <service id="Wingu\EasyAdminPlusBundle\Search\Autocomplete">
+            <argument type="service" id="easyadmin.config.manager"/>
+            <argument type="service" id="easyadmin.finder"/>
+            <argument type="service" id="property_accessor"/>
         </service>
         <service id="easyadmin.autocomplete" alias="Wingu\EasyAdminPlusBundle\Search\Autocomplete" public="true"/>
 
@@ -19,11 +19,20 @@
         </prototype>
 
         <service id="Wingu\EasyAdminPlusBundle\Form\Type\ResourceType"
-                 class="Wingu\EasyAdminPlusBundle\Form\Type\ResourceType"
                  parent="form.type.entity"
                  public="false"
                  autowire="true">
             <tag name="form.type"/>
+        </service>
+
+        <service id="Wingu\EasyAdminPlusBundle\Form\Type\EasyAdminAutocompleteType" autoconfigure="true">
+            <argument type="service" id="easyadmin.config.manager"/>
+            <tag name="form.type"/>
+        </service>
+
+        <service id="Wingu\EasyAdminPlusBundle\Form\Filter\Type\AutocompleteType" autoconfigure="true">
+            <argument type="service" id="easyadmin.config.manager"/>
+            <tag name="easyadmin.filter.type"/>
         </service>
     </services>
 </container>
