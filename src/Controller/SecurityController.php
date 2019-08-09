@@ -12,11 +12,17 @@ class SecurityController extends BaseSecurityController
     /**
      * {@inheritdoc}
      */
-    protected function renderLogin(array $data)
+    protected function renderLogin(array $data): Response
     {
-        $data['logo'] = $this->getParameter('wingu_easy_admin_plus.logo');
-        $data['title'] = $this->getParameter('wingu_easy_admin_plus.title');
-
-        return new Response($this->get('twig')->render('@WinguEasyAdminPlus/security/login.html.twig', $data));
+        return new Response($this->get('twig')->render(
+            '@EasyAdmin/page/login.html.twig',
+            \array_merge(
+                $data,
+                [
+                    'csrf_token_intention' => 'authenticate',
+                    'action' => $this->generateUrl('fos_user_security_check'),
+                ]
+            )
+        ));
     }
 }

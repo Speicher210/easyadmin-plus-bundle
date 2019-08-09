@@ -20,8 +20,6 @@ class WinguEasyAdminPlusExtension extends ConfigurableExtension
     {
         $loader = new Loader\XmlFileLoader($container, new FileLocator(__DIR__ . '/../Resources/config'));
         $loader->load('services.xml');
-        $container->setParameter('wingu_easy_admin_plus.logo', $config['logo']);
-        $container->setParameter('wingu_easy_admin_plus.title', $config['title']);
 
         if (!\class_exists(FOSSecurityController::class)) {
             $container->removeDefinition(WinguSecurityController::class);
