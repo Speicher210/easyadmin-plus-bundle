@@ -5,7 +5,7 @@
            xsi:schemaLocation="http://symfony.com/schema/dic/services http://symfony.com/schema/dic/services/services-1.0.xsd">
 
     <services>
-        <defaults autowire="true" public="false"/>
+        <defaults public="false"/>
 
         <service id="Wingu\EasyAdminPlusBundle\Search\Autocomplete">
             <argument type="service" id="easyadmin.config.manager"/>
@@ -18,19 +18,16 @@
             <tag name="controller.service_arguments"/>
         </prototype>
 
-        <service id="Wingu\EasyAdminPlusBundle\Form\Type\ResourceType"
-                 parent="form.type.entity"
-                 public="false"
-                 autowire="true">
+        <service id="Wingu\EasyAdminPlusBundle\Form\Type\ResourceType" parent="form.type.entity" public="false">
             <tag name="form.type"/>
         </service>
 
-        <service id="Wingu\EasyAdminPlusBundle\Form\Type\EasyAdminAutocompleteType" autoconfigure="true">
+        <service id="Wingu\EasyAdminPlusBundle\Form\Type\EasyAdminAutocompleteType">
             <argument type="service" id="easyadmin.config.manager"/>
             <tag name="form.type"/>
         </service>
 
-        <service id="Wingu\EasyAdminPlusBundle\Form\Filter\Type\AutocompleteType" autoconfigure="true">
+        <service id="Wingu\EasyAdminPlusBundle\Form\Filter\Type\AutocompleteType">
             <argument type="service" id="easyadmin.config.manager"/>
             <tag name="easyadmin.filter.type"/>
         </service>
