@@ -22,8 +22,8 @@
   ],
   "require": {
     "php": "~7.1",
-    "symfony/dependency-injection": "^4.2",
-    "symfony/serializer": "^4.2",
+    "symfony/dependency-injection": "^4.2 || ^5.0",
+    "symfony/serializer": "^4.2 || ^5.0",
     "easycorp/easyadmin-bundle": "^2.1.4",
     "twig/twig": "^2.0 || ^3.0"
   },
