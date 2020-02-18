@@ -28,7 +28,7 @@
     "twig/twig": "^2.0 || ^3.0"
   },
   "require-dev": {
-    "speicher210/cloudinary-bundle": "^0.9",
+    "speicher210/cloudinary-bundle": "^0.10",
     "friendsofsymfony/user-bundle": "^2.0"
   },
   "suggest": {
